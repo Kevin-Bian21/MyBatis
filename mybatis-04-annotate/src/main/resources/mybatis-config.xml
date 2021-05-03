@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--核心配置文件-->
+<configuration>
+<!--  引入外部配置文件-->
+  <properties resource="db.properties" >
+    <property name="username" value="root"/>
+    <property name="password" value="bwk123"/>
+  </properties>
+
+<!--  起别名-->
+  <typeAliases>
+    <!-- 给实体类起别名-->
+    <!--实体类如果比较少，则用第一种，实体类比较多就用第二种方式package；第一种可以自定义别名，第二种不行，但可以使用注解实现-->
+    <typeAlias type="com.bian.pojo.User" alias="User"/>
+<!--    <package name="com.bian.pojo"/>-->
+  </typeAliases>
+<!--mybatis可以配置多套环境，但是每个SqlSessionFactory实例只能选一种环境-->
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <!--POOLED  数据库连接池-->
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+<!--  映射器-->
+  <mappers>
+<!--    <mapper resource="com/bian/Dao/UserMapper.xml"/>-->
+    <mapper class="com.bian.Dao.UserMapper"/>
+  </mappers>
+</configuration>

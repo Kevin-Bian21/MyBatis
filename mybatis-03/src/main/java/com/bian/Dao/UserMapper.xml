@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace=绑定一个对应的Mapper接口-->
+<mapper namespace="com.bian.Dao.UserMapper">
+
+  <resultMap id="UserMap" type="User">
+    <!--column数据库中的字段，property实体类中的属性-->
+<!--    <result column="id" property="id"/>-->
+<!--    <result column="name" property="name"/>-->
+    <result column="pwd" property="password"/>
+  </resultMap>
+<!--当实体类的字段名跟数据库的名称不一样时，查完后显示为null，解决方法-->
+<!--第一种方法-->
+<!--
+  <select id="getUserById" resultType="User">
+    select id,name,pwd as password from mybatis.user where id = #{id};
+  </select>
+-->
+<!--  第二种方法-->
+  <select id="getUserById" resultMap="UserMap">
+    select * from user where id = #{id}
+  </select>
+  
+
+<!--  分页:limit实现-->
+  <select id="getUserByLimit" parameterType="map" resultMap="UserMap">
+    select * from user limit #{startIndex},#{pageSize} ;
+  </select>
+
+<!--  分页2:RowBounds实现-->
+  <select id="getUserByRowBounds" resultMap="UserMap">
+    select * from user;
+  </select>
+</mapper>

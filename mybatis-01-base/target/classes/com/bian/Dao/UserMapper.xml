@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace=绑定一个对应的Mapper接口-->
+<mapper namespace="com.bian.Dao.UserMapper">
+  <select id="getUserList"  resultType = "com.bian.pojo.User">
+    select * from mybatis.user;
+  </select>
+
+  <select id="getUserById" parameterType="int" resultType = "com.bian.pojo.User">
+    select * from mybatis.user where id = #{id};
+  </select>
+
+  <insert id="addUser" parameterType="com.bian.pojo.User">
+    insert into mybatis.user (id, name, pwd) values (#{id},#{name},#{pwd});
+  </insert>
+  
+  <update id="updateUser" parameterType="com.bian.pojo.User">
+    update mybatis.user set name=#{name},pwd=#{pwd} where id=#{id};
+  </update>
+
+  <delete id="deleteUser" parameterType="int" >
+    delete from mybatis.user where id=#{id};
+  </delete>
+  
+<!--  模糊查询-->
+  <select id="getUserLike" resultType="com.bian.pojo.User">
+    select * from mybatis.user where name like "%"#{value}"%";
+  </select>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bian.Dao.BlogMapper">
+    <insert id="addBlog" parameterType="Blog">
+        insert into blog (id,title,author,create_time,views) values (#{id},#{title},#{author},#{createTime},#{views});
+    </insert>
+
+    <!--使用sql标签抽取公共部分，方便复用-->
+    <sql id="public_sql">
+        <if test="title != null">
+            title = #{title}
+        </if>
+        <if test=" author != null">
+            and author = #{author}
+        </if>
+    </sql>
+
+    <select id="queryBlogIf" resultType="Blog">
+        select * from blog
+        <where>
+            <include refid="public_sql"></include>
+        </where>
+    </select>
+
+    <!-- choose相当于Java中的switch case语句，当传入多个满足的参数时，只执行最前面满足的表达式，都不满足时，执行otherwise语句-->
+    <select id="queryBlogChoose" resultType="Blog">
+        select * from blog
+        <where>
+            <choose>
+                <when test="title != null">
+                    title = #{title}
+                </when>
+                <when test="author != null">
+                    and author = #{author}
+                </when>
+                <otherwise>
+                    and title = "sql应该怎么学"
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <update id="updateBlog" parameterType="map">
+        update blog
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="author != null">author = #{author}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+<!--    从blog表中查找id为m,n..的博客信息，sql语句如下，通过foreach来进行集合的遍历
+        1. select * from blog where id in (item) //item为我们传入的集合数组(1,2,3)
+        2. select * from blog where (id=1 or id=2 or id=3)-->
+    <select id="queryBlogForEach" resultType="Blog">
+<!--        select * from blog where id in-->
+<!--        <foreach collection="collect" item="item"  open = "(" separator="," close=")">-->
+<!--            #{item}-->
+<!--        </foreach>-->
+
+        select * from blog
+        <where>
+            <foreach collection="collect" item="item_id" open="(" close=")" separator="or">
+                id = #{item_id}
+            </foreach>
+        </where>
+    </select>
+
+</mapper>
